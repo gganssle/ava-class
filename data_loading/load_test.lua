@@ -1,7 +1,7 @@
 ns = 1501
 ntr = 187
 
-file = torch.DiskFile('test_dat/four_gathers@data@', 'r')
+file = torch.DiskFile('test_dat/four_gathers@', 'r')
 file:binary()
 raw = file:readFloat(ns*ntr)
 file:close()
