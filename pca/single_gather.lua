@@ -6,7 +6,7 @@
 require 'unsup'
 
 ns = 1501
-ntr = 40
+ntr = 45
 
 file = torch.DiskFile('/home/ubuntu/bbimgath/gathers.rsf@', 'r')
 file:binary()
