@@ -19,4 +19,9 @@ for j = 1, ntr do
         end
 end
 
+centroids, totalcounts = unsup.kmeans(dat, 5, 200, ntr, false, true)
 
+print(#centroids, '\n')
+print(#totalcounts, '\n')
+
+print(totalcounts)
