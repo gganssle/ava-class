@@ -4,7 +4,7 @@
 require 'unsup'
 
 ns = 1501
-ntr = 187
+ntr = 45
 
 file = torch.DiskFile('../data_loading/test_dat/four_gathers.rsf@', 'r')
 file:binary()
@@ -19,7 +19,11 @@ for j = 1, ntr do
         end
 end
 
-centroids, totalcounts = unsup.kmeans(dat, 5, 1, 10, false, true)
+-- condition data with zero mean and unit variance
+dat:add(-dat:mean())
+dat:div(dat:std())
+
+centroids, totalcounts = unsup.kmeans(dat, 5, 1, ntr, nil, true)
 
 print(#centroids, '\n')
 print(#totalcounts, '\n')
