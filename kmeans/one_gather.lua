@@ -1,10 +1,11 @@
---[[ this is a test of unsup.kmeans. I'm using the test data here as to
-	not consume a ton of memory ]]--
+--[[ here's a kmeans algo on one gather, with clustering ]]--
 
 require 'unsup'
 
 ns = 1501
 ntr = 45
+
+timer = torch.Timer()
 
 file = torch.DiskFile('../data_loading/test_dat/four_gathers.rsf@', 'r')
 file:binary()
@@ -23,15 +24,26 @@ end
 dat:add(-dat:mean())
 dat:div(dat:std())
 
-centroids, totalcounts = unsup.kmeans(dat, 5, 1, ntr, nil, true)
+-- k means
+k = 5		-- # of centroids
+iter = 200	-- # of iteratiosn
+bsz = 10	-- batchsize
+centroids, totalcounts = unsup.kmeans(dat, k, iter, bsz, nil, true)
 
-print(#centroids, '\n')
-print(#totalcounts, '\n')
+-- clustering
+clst = torch.Tensor(ns)
+dist = torch.Tensor(k)
 
-print(totalcounts)
+-- calc Euclidean distance to centroids
+for i = 1, ns do
+	for j = 1, k do
+		dist[j] = torch.sqrt((centroids[j] - dat[i]):pow(2):sum())
+	end
+	
+	-- cluster by minimum distance
+	dist, idx = dist:sort()
+	clst[i] = idx[1]
+end
 
-print(totalcounts:sum())
-
-print(ns*ntr)
-
---print(centroids[1])
+--print(clst)
+print(timer:time().real)
