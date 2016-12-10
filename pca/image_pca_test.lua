@@ -18,7 +18,6 @@ vals, vects = unsup.pcacov(gray)
 
 --image.display(vects)
 
-cmprsd = vects[{{-500,-1},{}}]
 cmprsd = vects[{{},{-10,-1}}]
 
 new = torch.mm(torch.mm(gray,cmprsd), cmprsd:t())
