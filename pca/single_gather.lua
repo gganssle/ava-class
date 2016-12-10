@@ -8,7 +8,7 @@ require 'unsup'
 ns = 1501
 ntr = 45
 
-file = torch.DiskFile('/home/ubuntu/bbimgath/gathers.rsf@', 'r')
+file = torch.DiskFile('/home/gram/ava-class/data_loading/test_dat/four_gathers.rsf@', 'r')
 file:binary()
 raw = file:readFloat(ns*ntr)
 file:close()
@@ -24,8 +24,10 @@ end
 
 e, v = unsup.pcacov(dat)
 
-print('size e = ', #e, '\n')
-print('size v = ', v:size(1), 'x', v:size(2), '\n')
+--print('size e = ', #e, '\n')
+--print('size v = ', v:size(1), 'x', v:size(2), '\n')
 
 --print(v)
---print(e)
+print(e)
+
+
