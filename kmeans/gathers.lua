@@ -5,22 +5,24 @@ require 'unsup'
 require 'image'
 
 ns = 1501
-ntr = 184
+ntr = 4600
 ng = 46
 
 -- designate I/O
-infile = torch.DiskFile('/home/gram/ava-class/data_loading/test_dat/four_gathers.rsf@', 'r')
+infile = torch.DiskFile('/home/ubuntu/bbimgath/wbb_gathers@data@', 'r')
 infile:binary()
+
+outfile = torch.DiskFile('/home/ubuntu/bbimgath/clustered', 'w')
+outfile:binary()
 
 -- initialize
 dat = torch.Tensor(ns,ng)
 timer = torch.Timer()
-clst = torch.Tensor(ns, ntr/ng)
+clst = torch.Tensor(ns)
 k = 5		-- # of centroids
 iter = 100	-- # of iteratiosn
 bsz = 10	-- batchsize
 dist = torch.Tensor(k)
-counter = 1
 
 for kk = 1, ntr, ng do
 	-- load one gather into mem
@@ -54,15 +56,20 @@ for kk = 1, ntr, ng do
 
 		-- cluster by minimum distance
 		dist, idx = dist:sort()
-		clst[i][counter] = idx[1]
+		clst[i] = idx[1]
 	end
-	counter = counter + 1
+
+	-- write out clustered data
+	for i = 1, ns do
+		outfile:writeFloat(clst[i])
+	end
 end
 
 print('timing = ',timer:time().real)
 
-image.display(clst)
+--image.display(clst)
 --print(clst)
 
 -- clean
 infile:close()
+outfile:close()
