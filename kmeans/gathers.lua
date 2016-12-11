@@ -5,7 +5,7 @@ require 'unsup'
 require 'image'
 
 ns = 1501
-ntr = 4600
+ntr = 46000
 ng = 46
 
 -- designate I/O
