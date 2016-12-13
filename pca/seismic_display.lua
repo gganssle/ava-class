@@ -7,7 +7,7 @@ require 'unsup'
 ns = 1501
 ntr = 45
 
-file = torch.DiskFile('/home/gram/ava-class/data_loading/test_dat/four_gathers.rsf@', 'r')
+file = torch.DiskFile('../data_loading/test_dat/four_gathers.rsf@', 'r')
 file:binary()
 raw = file:readFloat(ns*ntr)
 file:close()
@@ -20,7 +20,7 @@ for j = 1, ntr do
         end
 end
 
-image.display(dat)
+--image.display(dat)
 
 
 dat:add(-dat:mean())
@@ -28,11 +28,17 @@ dat:div(dat:std())
 
 vals, vects = unsup.pcacov(dat)
 
-image.display(vects)
+--image.display(vects)
 
 cmprsd = vects[{{},{-2,-1}}]
 
-new = torch.mm(torch.mm(dat,cmprsd), cmprsd:t())
+--new = torch.mm(torch.mm(dat,cmprsd), cmprsd:t())
 
-image.display(new)
+--image.display(new)
 
+--[[print('old size = ', dat:size(1), 'x', dat:size(2))
+print('new size = ', new:size(1), 'x', new:size(2))]]--
+
+proj = torch.mm(dat,cmprsd)
+
+print(#proj)

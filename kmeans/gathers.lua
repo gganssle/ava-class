@@ -5,7 +5,7 @@ require 'unsup'
 require 'image'
 
 ns = 1501
-ntr = 46000
+ntr = 45080
 ng = 46
 
 -- designate I/O
@@ -23,8 +23,14 @@ k = 5		-- # of centroids
 iter = 100	-- # of iteratiosn
 bsz = 10	-- batchsize
 dist = torch.Tensor(k)
+counter = 1
 
 for kk = 1, ntr, ng do
+	-- debug
+	--print(counter)
+	print(kk)
+	counter = counter + 1
+
 	-- load one gather into mem
 	if kk == 1 then
 		raw = infile:readFloat(ns*ng)
