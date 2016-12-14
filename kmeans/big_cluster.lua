@@ -20,15 +20,39 @@ dat = torch.Tensor(ns,ng)
 timer = torch.Timer()
 clst = torch.Tensor(ns)
 k = 5		-- # of centroids
-iter = 2	-- # of iteratiosn
-bsz = 10	-- batchsize 10=174, 1000=179
+iter = 2	-- # of iterations
+bsz = 10	-- batchsize
 dist = torch.Tensor(k)
 counter = 1
 
+
+-- k means centroid calculation
+	-- intitialize
+treval = 2300
+raw = infile:readFloat(ns * treval)
+big = torch.Tensor(ns*treval/ng, ng)
+
+for k = 1, treval, ng do
+	for j = 1, ng do
+		for i = 1, ns do
+			big[i][j] = raw[i + (j-1)*ns + (k-1)*ng*ns]
+		end
+	end
+end
+
+	-- condition data with zero mean and unit variance
+big:add(-big:mean())
+big:div(big:std())
+
+	-- k means
+centroids, totalcounts = unsup.kmeans(big, k, iter, bsz, nil, true)
+
+
+-- clustering gather-per-gather
 for kk = 1, ntr, ng do
 	-- debug
 	--print(counter)
-	print(kk)
+	--print(kk)
 	counter = counter + 1
 
 	-- load one gather into mem
@@ -45,13 +69,6 @@ for kk = 1, ntr, ng do
                 	dat[i][j] = raw[i + (j-1)*ns]
 	        end
 	end
-
-	-- condition data with zero mean and unit variance
-	dat:add(-dat:mean())
-	dat:div(dat:std())
-
-	-- k means
-	centroids, totalcounts = unsup.kmeans(dat, k, iter, bsz, nil, true)
 
 	-- clustering
 		-- calc Euclidean distance to centroids
