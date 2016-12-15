@@ -20,7 +20,7 @@ dat = torch.Tensor(ns,ng)
 timer = torch.Timer()
 clst = torch.Tensor(ns)
 k = 5		-- # of centroids
-iter = 200	-- # of iterations
+iter = 20	-- # of iterations
 bsz = 10	-- batchsize
 dist = torch.Tensor(k)
 counter = 1
@@ -28,7 +28,7 @@ counter = 1
 
 -- k means centroid calculation
 	-- intitialize
-treval = 2300
+treval = 9200
 raw = infile:readFloat(ns * treval)
 local big = torch.Tensor(ns*treval/ng, ng)
 
